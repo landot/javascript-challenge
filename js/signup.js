@@ -57,9 +57,21 @@ function validateForm(form) {
 		}
 		/*tests the age in the form*/
 		if(i = 7) {
-			var today = new Date();
-			today = 
-			if(form.elements[requiredFields[i]].value. )
+			var t = new Date();
+			var today = t.getUTCDate();
+			var m = new Date();
+			var month = m.getUTCMonth();
+			var y = new Date();
+			var year = y.getUTCFullYear();
+			if((year - birthdate.getUTCFullYear()) > 13) {     && birthdate.getUTCMonth() > month && birthdate.getUTCDate() > today) {
+				valid = true;
+			}else if(year = birthdate.getUTCFullYear() && birthdate.getUTCMonth() > month) {
+				valid = true;
+			}else if(year = birthdate.getUTCFullYear() && birthdate.getUTCMonth() = month && birthdate.getUTCDate() > today) {
+				valid = true;
+			}else {
+				valid = false;
+			}
 		}
 
 		if(!validateRequiredField(form.elements[requiredFields[i]])) {
@@ -72,6 +84,29 @@ function validateRequiredField(field) {
 	var value = field.value;
 	value = value.trim();
 	var valid = value.length > 0;
+	if(field = 'zip') {
+		var zipRegExp = new RegExp('^\\d{5}$');
+		if(!zipRegExp.test(form.elements[requiredFields[i]].value)) {
+			valid = false;
+		}
+	}
+	if(field = 'birthdate') {
+		var t = new Date();
+		var today = t.getUTCDate();
+		var m = new Date();
+		var month = m.getUTCMonth();
+		var y = new Date();
+		var year = y.getUTCFullYear();
+		if((year - birthdate.getUTCFullYear()) > 13) {  
+			valid = true;
+		}else if(year = birthdate.getUTCFullYear() && birthdate.getUTCMonth() > month) {
+			valid = true;
+		}else if(year = birthdate.getUTCFullYear() && birthdate.getUTCMonth() = month && birthdate.getUTCDate() > today) {
+			valid = true;
+		}else {
+			valid = false;
+		}			
+	}
 	if(valid) {
 		field.className = 'form-control';
 	}else {
