@@ -5,6 +5,7 @@ body {
 }
 
 .error-message {
+    border: 1px 
     color: #F00;
 }
 
