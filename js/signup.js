@@ -22,8 +22,13 @@ function onReady() {
 	/* need to figure out this occupation crap */
 	/*When other is selected for occupation, creates field to enter in occupation manually*/
 	document.getElementById('occupation').addEventListener('change', function(){
+<<<<<<< HEAD
 		if(document.getElementById('occupation').value = "other") {
 			document.getElementByName('occupationOther').style.display = 'block'; 		
+=======
+		if(document.getElementById('occupation').value = 'other') {
+			document.getElementById('occupation').style.display = 'block'; 		
+>>>>>>> b6c86e93c92686c69e1bb4addaff00663f199910
 		}
 	});
 
