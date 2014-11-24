@@ -48,7 +48,14 @@ function onReady() {
  * Also the keyword 'this' will refer to the form that is being submitted while inside this function.
  * */
 function onSubmit(evt) {
-	var valid = validateForm(this);
+	
+	try {
+		var valid = validateForm(this);
+	}
+	catch(exception) {
+		console.log(exception);
+		valid = false; 
+	}	
     if (!valid) {
         var errMsg = document.getElementById('error-message');
         errMsg.innerHTML = 'Please provide values for the required fields!';
@@ -60,7 +67,6 @@ function onSubmit(evt) {
     }
     evt.returnValue = valid;
     return valid;
-
 }
 
 
@@ -87,7 +93,7 @@ function validateRequiredField(field) {
 	if(field = 'occupation' && occupation.value == 'other') {
 		field = occupationOther;
 	}else if(field = 'occupation') {
-		field.className = 'form-control';
+		field.className = 'form-control'; /*FIX THIS ERROR (occupation problem) */
 		return valid;
 	}
 	/*tests for only blank space*/
