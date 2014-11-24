@@ -6,7 +6,7 @@ body {
 
 .error-message {
     border: 1px 
-    color: #F00;
+    solid: #F00;
 }
 
 form input[name='occupationOther'] {
