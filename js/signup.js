@@ -84,7 +84,7 @@ if a field is not correct it shows that it is invalid*/
 function validateRequiredField(field) {
 	/*checks if user picked an occupation and also
 	checks if user picks other for occupation (if other: changes field value to the input box*/
-	if(field = 'occupation' && occupation.value = 'other') {
+	if(field = 'occupation' && occupation.value == 'other') {
 		field = occupationOther;
 	}else if(field = 'occupation') {
 		field.className = 'form-control';
