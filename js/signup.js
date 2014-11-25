@@ -47,13 +47,11 @@ function onReady() {
  * to stop the form from being submitted if it is invalid.
  * Also the keyword 'this' will refer to the form that is being submitted while inside this function.
  * */
-function onSubmit(evt) {
-	
+function onSubmit(evt) {	
 	try {
 		var valid = validateForm(this);
 	}
 	catch(exception) {
-		console.log(exception);
 		valid = false; 
 	}	
     if (!valid) {
@@ -74,13 +72,24 @@ function onSubmit(evt) {
 /*tests the fields to make sure that there are actual inputted values
 *returns whether the values are valid*/
 function validateForm(form) {
-	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state', 'zip', 'birthdate', 'occupation'];
+	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state', 'zip', 'birthdate'];
 	var i;
 	var valid = true;
 	for(i = 0; i < requiredFields.length; i++) {
 		if(!validateRequiredField(form.elements[requiredFields[i]])) {
 			valid = false;
 		}
+	}
+	/*tests if occupation is valid*/
+	if(occupation.value == 'other') {
+		if(occupationOther.value.trim().length > 0) {
+			field.className = 'form-control';
+		}else {
+			field.className = 'form-control invalid-field';
+			valid = false;
+		}
+	}else if(!(occupation.value == 'other')) {
+		field.className = 'form-control'; 
 	}
 }
 /*tests that the fields aren't just white space
@@ -89,28 +98,28 @@ checks birthdate to see if older than 13 years old
 if a field is not correct it shows that it is invalid*/
 function validateRequiredField(field) {
 	/*checks if user picked an occupation and also
-	checks if user picks other for occupation (if other: changes field value to the input box*/
+	checks if user picks other for occupation (if other: changes field value to the input box
 	if(field = 'occupation' && occupation.value == 'other') {
 		field = occupationOther;
 	}else if(field = 'occupation') {
-		field.className = 'form-control'; /*FIX THIS ERROR (occupation problem) */
+		field.className = 'form-control'; FIX THIS ERROR (occupation problem) 
 		return valid;
-	}
+	}*/
 	/*tests for only blank space*/
 	var value = field.value;
 	value = value.trim();
 	var valid = value.length > 0;
 
 	/*tests for a 5 digit zip code*/
-	if(field = 'zip') {
+	/*if(field = 'zip') {
 		var zipRegExp = new RegExp('^\\d{5}$');
 		if(!zipRegExp.test(value)) {
 			valid = false;
 		}
-	} 
+	}*/ 
 
 	/*tests the birthdate to make sure it is >13 years old*/
-	if(field = 'birthdate') {
+	/*if(field = 'birthdate') {
 		var t = new Date();
 		var today = t.getUTCDate();
 		var m = new Date();
@@ -131,7 +140,7 @@ function validateRequiredField(field) {
 			errMsg.innerHTML = 'Users must be at least 13 years old.'	
 			errMsg.style.display = 'block';
 		}	
-	}
+	}*/
 	if(valid) {
 		field.className = 'form-control';
 	}else {
