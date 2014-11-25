@@ -72,7 +72,7 @@ function onSubmit(evt) {
 /*tests the fields to make sure that there are actual inputted values
 *returns whether the values are valid*/
 function validateForm(form) {
-	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state', 'zip', 'birthdate'];
+	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state'];
 	var i;
 	var valid = true;
 	for(i = 0; i < requiredFields.length; i++) {
@@ -83,14 +83,49 @@ function validateForm(form) {
 	/*tests if occupation is valid*/
 	if(occupation.value == 'other') {
 		if(occupationOther.value.trim().length > 0) {
-			field.className = 'form-control';
+			occupationOther.className = 'form-control';
 		}else {
-			field.className = 'form-control invalid-field';
+			occupationOther.className = 'form-control invalid-field';
 			valid = false;
 		}
 	}else if(!(occupation.value == 'other')) {
-		field.className = 'form-control'; 
+		occupation.className = 'form-control'; 
 	}
+	//tests the zip code to see if it's valid (5 digits of numbers)
+	var zipRegExp = new RegExp('^\\d{5}$');
+	if(!zipRegExp.test(zip.value.trim())) {
+		valid = false;
+		zip.className = 'form-control invalid-field';
+	}else {
+		zip.className = 'form-control';
+	}
+
+	//test the birthdate to make sure the person is over 13 years old
+	var t = new Date();
+	var today = t.getUTCDate();
+	var m = new Date();
+	var month = m.getUTCMonth();
+	var y = new Date();
+	var year = y.getUTCFullYear(); 
+	if((year - birthdate.getUTCFullYear()) > 13) {  
+		valid = true;
+		birthdate.className = 'form-control';
+	}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() > month) {
+		valid = true;
+		birthdate.className = 'form-control';
+	}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() == month && birthdate.value.getUTCDate() >= today) {
+		valid = true;
+		birthdate.className = 'form-control';	
+	}else {
+		valid = false;
+		birthdate.className = 'form-control invalid-field';	
+	} 
+	if(valid = false) {
+		var errMsg = document.getElementById('birthdateMessage');
+		errMsg.innerHTML = 'Users must be at least 13 years old.'	
+		errMsg.style.display = 'block';
+	}	
+	
 }
 /*tests that the fields aren't just white space
 also tests zip code if zip code is accurate 
@@ -109,14 +144,6 @@ function validateRequiredField(field) {
 	var value = field.value;
 	value = value.trim();
 	var valid = value.length > 0;
-
-	/*tests for a 5 digit zip code*/
-	/*if(field = 'zip') {
-		var zipRegExp = new RegExp('^\\d{5}$');
-		if(!zipRegExp.test(value)) {
-			valid = false;
-		}
-	}*/ 
 
 	/*tests the birthdate to make sure it is >13 years old*/
 	/*if(field = 'birthdate') {
