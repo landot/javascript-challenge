@@ -87,12 +87,10 @@ function validateForm(form) {
 			occupationOther.className = 'form-control';
 		}else {
 			occupationOther.className = 'form-control invalid-field';
-			//console.log('occupation error');
 			valid = false;
 		}
 	}else if(occupation.value == '') {
 		occupation.className = 'form-control invalid-field';
-		//console.log('occupation error');
 		valid = false; 
 	}else {
 		occupation.className = 'form-control';
@@ -102,32 +100,41 @@ function validateForm(form) {
 	if(!zipRegExp.test(zip.value.trim())) {
 		valid = false;
 		zip.className = 'form-control invalid-field';
-		//console.log('zip error');
 	}else {
 		zip.className = 'form-control';
 	}
 
 	//test the birthdate to make sure the person is over 13 years old
-    var today = new Date();
-    var birthday = new Date(birthdate.value);
-    var yearsDiff = today.getFullYear() - birthday.getUTCFullYear();
-    var monthsDiff = today.getMonth() - birthday.getUTCMonth();
-    var daysDiff = today.getDate() - birthday.getUTCDate();
-
-    if(monthsDiff < 0 || (0 == monthsDiff && daysDiff < 0)) {
-        yearsDiff--;
+    var birthday = form.elements['birthdate']; 
+    var birthdayError = document.getElementById('birthdateMessage');
+    var age = calculateAge(birthday.value);
+    if(age < 13){
+        valid = false;
+        birthday.className = 'form-control invalid-form';
+        birthdayError.style.display = 'block';
+        birthdayError.innerHTML = "You must be 13 years or older to sign up"
+    } else {
+        birthdayError.style.display = 'none';
     }
-    if(yearsDiff < 13) {
-    	var errMsg = document.getElementById('birthdateMessage');
-		errMsg.innerHTML = 'Users must be at least 13 years old.'	
-		errMsg.style.display = 'block';
-		valid = false;
-    	birthdate.className = 'form-control invalid-field';
-    }else {
-    	birthdate.className = 'form-control';
-    }	
 	return valid;
 }
+
+
+function calculateAge(dob) {
+    dob = new Date(dob);  
+    var today = new Date();
+
+    var yearsDiff = today.getFullYear() - dob.getUTCFullYear();
+    var monthsDiff = today.getMonth() - dob.getUTCMonth();
+    var daysDiff = today.getDate() - dob.getUTCDate();
+    
+    if (monthsDiff < 0 || (0 == monthsDiff && daysDiff < 0)) {
+        yearsDiff--;
+    }
+    
+    return yearsDiff;
+};
+
 /*tests that the fields aren't just white space
 also tests zip code if zip code is accurate 
 checks birthdate to see if older than 13 years old
@@ -141,7 +148,6 @@ function validateRequiredField(field) {
 	if(valid) {
 		field.className = 'form-control';
 	}else {
-		//console.log('error');
 		field.className = 'form-control invalid-field';
 	}
 	return valid;
