@@ -41,12 +41,7 @@ function onReady() {
 	signupForm.addEventListener('submit', onSubmit); 
 }
 
-/* onSubmit()
- * Called when the user attempts to submit the form
- * The browser will pass an event object as the first parameter and we can use this object
- * to stop the form from being submitted if it is invalid.
- * Also the keyword 'this' will refer to the form that is being submitted while inside this function.
- * */
+/* onSubmit() Called when the user attempts to submit the form */
 function onSubmit(evt) {	
 	var valid = true;
 	try {
@@ -73,7 +68,7 @@ function onSubmit(evt) {
 /*tests the fields to make sure that there are actual inputted values
 *returns whether the values are valid*/
 function validateForm(form) {
-	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state'];
+	var requiredFields =['firstName', 'lastName', 'address1', 'city', 'state', 'birthdate'];
 	var i;
 	var valid = true;
 	for(i = 0; i < requiredFields.length; i++) {
@@ -119,7 +114,7 @@ function validateForm(form) {
 	return valid;
 }
 
-
+//calculates and returns the user's age
 function calculateAge(dob) {
     dob = new Date(dob);  
     var today = new Date();
