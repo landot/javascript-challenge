@@ -48,11 +48,12 @@ function onReady() {
  * Also the keyword 'this' will refer to the form that is being submitted while inside this function.
  * */
 function onSubmit(evt) {	
+	var valid = true;
 	try {
 		var valid = validateForm(this);
 	}
-	catch(exception) {
-		valid = false; 
+	catch(err) {
+		valid = !valid; 
 	}	
     if (!valid) {
         var errMsg = document.getElementById('error-message');
@@ -86,91 +87,61 @@ function validateForm(form) {
 			occupationOther.className = 'form-control';
 		}else {
 			occupationOther.className = 'form-control invalid-field';
+			//console.log('occupation error');
 			valid = false;
 		}
-	}else if(!(occupation.value == 'other')) {
-		occupation.className = 'form-control'; 
+	}else if(occupation.value == '') {
+		occupation.className = 'form-control invalid-field';
+		//console.log('occupation error');
+		valid = false; 
+	}else {
+		occupation.className = 'form-control';
 	}
 	//tests the zip code to see if it's valid (5 digits of numbers)
 	var zipRegExp = new RegExp('^\\d{5}$');
 	if(!zipRegExp.test(zip.value.trim())) {
 		valid = false;
 		zip.className = 'form-control invalid-field';
+		//console.log('zip error');
 	}else {
 		zip.className = 'form-control';
 	}
 
 	//test the birthdate to make sure the person is over 13 years old
-	var t = new Date();
-	var today = t.getUTCDate();
-	var m = new Date();
-	var month = m.getUTCMonth();
-	var y = new Date();
-	var year = y.getUTCFullYear(); 
-	if((year - birthdate.getUTCFullYear()) > 13) {  
-		valid = true;
-		birthdate.className = 'form-control';
-	}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() > month) {
-		valid = true;
-		birthdate.className = 'form-control';
-	}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() == month && birthdate.value.getUTCDate() >= today) {
-		valid = true;
-		birthdate.className = 'form-control';	
-	}else {
-		valid = false;
-		birthdate.className = 'form-control invalid-field';	
-	} 
-	if(valid = false) {
-		var errMsg = document.getElementById('birthdateMessage');
+    var today = new Date();
+    var birthday = new Date(birthdate.value);
+    var yearsDiff = today.getFullYear() - birthday.getUTCFullYear();
+    var monthsDiff = today.getMonth() - birthday.getUTCMonth();
+    var daysDiff = today.getDate() - birthday.getUTCDate();
+
+    if(monthsDiff < 0 || (0 == monthsDiff && daysDiff < 0)) {
+        yearsDiff--;
+    }
+    if(yearsDiff < 13) {
+    	var errMsg = document.getElementById('birthdateMessage');
 		errMsg.innerHTML = 'Users must be at least 13 years old.'	
 		errMsg.style.display = 'block';
-	}	
-	
+		valid = false;
+    	birthdate.className = 'form-control invalid-field';
+    }else {
+    	birthdate.className = 'form-control';
+    }	
+	return valid;
 }
 /*tests that the fields aren't just white space
 also tests zip code if zip code is accurate 
 checks birthdate to see if older than 13 years old
 if a field is not correct it shows that it is invalid*/
 function validateRequiredField(field) {
-	/*checks if user picked an occupation and also
-	checks if user picks other for occupation (if other: changes field value to the input box
-	if(field = 'occupation' && occupation.value == 'other') {
-		field = occupationOther;
-	}else if(field = 'occupation') {
-		field.className = 'form-control'; FIX THIS ERROR (occupation problem) 
-		return valid;
-	}*/
 	/*tests for only blank space*/
 	var value = field.value;
 	value = value.trim();
 	var valid = value.length > 0;
 
-	/*tests the birthdate to make sure it is >13 years old*/
-	/*if(field = 'birthdate') {
-		var t = new Date();
-		var today = t.getUTCDate();
-		var m = new Date();
-		var month = m.getUTCMonth();
-		var y = new Date();
-		var year = y.getUTCFullYear(); 
-		if((year - birthdate.getUTCFullYear()) > 13) {  
-			valid = true;
-		}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() > month) {
-			valid = true;
-		}else if(year == birthdate.value.getUTCFullYear() && birthdate.value.getUTCMonth() == month && birthdate.value.getUTCDate() >= today) {
-			valid = true;
-		}else {
-			valid = false;
-		} 
-		if(valid = false) {
-			var errMsg = document.getElementById('birthdateMessage');
-			errMsg.innerHTML = 'Users must be at least 13 years old.'	
-			errMsg.style.display = 'block';
-		}	
-	}*/
 	if(valid) {
 		field.className = 'form-control';
 	}else {
+		//console.log('error');
 		field.className = 'form-control invalid-field';
 	}
 	return valid;
